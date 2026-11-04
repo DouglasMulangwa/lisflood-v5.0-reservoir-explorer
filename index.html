@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+
+<html lang="en-GB">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="light" name="color-scheme"/>
+<title>LISFLOOD v5.0 reservoir release explorer</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<style>
+:root{font-family:Inter,Arial,Helvetica,sans-serif;color:#1f2d3d;background:#f3f5f7;font-size:14px}*{box-sizing:border-box}body{margin:0}button,input{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid #327def;outline-offset:3px}a{color:#1263bd;text-decoration:underline}header{background:#1f3a56;color:white;border-radius:10px;display:flex;justify-content:space-between;align-items:center;padding:12px 18px;gap:12px}h1{font-size:clamp(21px,2.1vw,30px);margin:0;letter-spacing:-.6px}h2{font-size:17px;margin:0 0 13px;font-weight:800}h3{font-size:15px;margin:0 0 10px}p{margin:6px 0 10px;line-height:1.45}.wrap{max-width:1800px;margin:0 auto;padding:12px}.reset{border:1px solid #c7d0da;border-radius:8px;background:#ffffff;color:#22354a;padding:9px 14px;font-weight:700;white-space:nowrap}.dashboard{display:grid;grid-template-columns:1.03fr 1.08fr .78fr;grid-template-areas:'curves tank rules' 'curves controls table' 'credits credits disclaimer';gap:12px;margin-top:12px;align-items:stretch}.panel{border:1px solid #d5dde6;background:#ffffff;border-radius:10px;padding:14px;box-shadow:none;min-width:0}.curves{grid-area:curves;display:flex;flex-direction:column}.tank-panel{grid-area:tank}.control-panel{grid-area:controls}.rules-panel{grid-area:rules}.table-panel{grid-area:table}.credits{grid-area:credits}.disclaimer{grid-area:disclaimer}.inflow-buttons{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:13px}.choice{background:#ffffff;color:#24384c;border:1px solid #c7d0da;border-radius:7px;font-weight:700;padding:10px 14px}.choice.active{background:#315f87;border-color:#315f87;color:white}.light-label{font-weight:750;margin-bottom:8px}.lights{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:5px;margin-bottom:17px}.light{border:1px solid #d9e0e7;background:#f7f8fa;border-radius:8px;padding:10px 3px;display:flex;align-items:center;justify-content:center;gap:5px;opacity:.62;white-space:nowrap;font-weight:700;font-size:12px;color:#617080}.dot{height:10px;width:10px;flex:none;border-radius:50%;background:#b8c0ca}.light.on{border:2px solid var(--rule-colour);padding:9px 2px;opacity:1;background:#ffffff;color:#22354a}.light.on .dot{background:var(--rule-colour);box-shadow:none}.chart{display:block;width:100%;max-height:560px;flex:1;min-height:320px}.keys{display:flex;gap:8px 16px;flex-wrap:wrap;font-size:12px;margin:7px 0}.key{width:18px;height:6px;display:inline-block;vertical-align:middle;border-radius:3px;margin-right:5px}.summary{border:1px solid #b6d5fb;background:#e9f3ff;border-radius:9px;display:flex;justify-content:space-between;gap:10px;padding:13px 17px;margin-top:auto;align-items:center}.big{font-size:clamp(21px,2vw,30px);font-weight:800;font-variant-numeric:tabular-nums}.sub{font-size:12px;color:#415d83}.tank-scene{position:relative;height:277px;border-radius:9px;overflow:hidden;background:#e8eef3;color:#22354a}.hills{position:absolute;bottom:3%;height:28%;width:130%;left:-15%;background:#d7dee5;clip-path:polygon(0 75%,18% 25%,32% 62%,50% 15%,67% 65%,85% 20%,100% 72%,100% 100%,0 100%);opacity:.8}.tank-vessel{position:absolute;z-index:2;left:19%;width:57%;height:207px;bottom:15px;border:6px solid #6f818f;border-top:8px solid #5e7381;border-bottom:7px solid #667b89;border-radius:11px 11px 25px 25px;overflow:hidden;background:#f7fafc;box-shadow:none}.tank-strata{position:absolute;inset:0;background:linear-gradient(to bottom,#efb2b4 0% 9%,#efcaaa 9% 20%,#c6ddc7 20% 43%,#efe6b7 43% 100%);opacity:.2}.tank-water{position:absolute;bottom:0;left:0;right:0;height:50%;background:linear-gradient(#76c6e8,#3189b8);transition:height .15s;box-shadow:none}.tank-water:before{content:"";position:absolute;top:0;left:0;right:0;height:4px;background:#cdeaf6;animation:none}@keyframes ripple{to{transform:translateY(3px)}}.pipe{position:absolute;height:22px;border-radius:11px;background:#7d8f9b;z-index:4;border:1px solid #6c7c88}.pipe.in{left:4%;top:26px;width:27%}.pipe.out{right:2%;bottom:75px;width:29%}.stream{position:absolute;background:#49a9d8;border-radius:6px;z-index:3;transform-origin:top;opacity:.95}.stream.in{left:29%;top:43px;width:21px;height:105px;transform:rotate(-13deg)}.stream.out{right:5%;bottom:2px;width:20px;height:85px;transform:rotate(-25deg)}.tag{position:absolute;z-index:6;background:#ffffff;border:1px solid #9fb2c2;padding:5px 8px;border-radius:7px;font-size:12px;font-weight:700;box-shadow:none}.tag.in{left:28%;top:7px}.tag.filling{right:3%;top:7px}.tag.ft{left:5%;top:45%}.tag.release{right:2%;bottom:9px}.strata-legend{position:absolute;right:1%;top:57px;z-index:5;width:27%;font-size:11px;font-weight:700;line-height:1.25}.strata-legend div{display:flex;gap:5px;align-items:center;margin-bottom:7px}.strata-legend i{width:8px;height:25px;flex:none;border-radius:3px}.tank-status{background:#f6f8fa;border:1px solid #d5dde6;border-radius:8px;padding:8px 10px;margin-top:10px;display:flex;gap:8px;justify-content:space-around;flex-wrap:wrap;font-size:12px}.zone-badge{background:#d8e7d6;border-radius:5px;color:#2f4d2d;padding:2px 6px;font-weight:800}.controls-grid{display:grid;grid-template-columns:minmax(0,1fr) 160px;gap:14px}.sliders{display:grid;gap:12px}.slider-row{display:grid;grid-template-columns:minmax(130px,155px) minmax(70px,1fr) 65px;gap:9px;align-items:center}.slider-row label{font-size:12px;font-weight:700}.slider-row input{width:100%;accent-color:var(--slider-colour);cursor:pointer}.slider-row output{font-weight:800;text-align:right;font-variant-numeric:tabular-nums;border:1px solid #ccd9ea;border-radius:6px;padding:6px 3px;background:#fafcff}.parameter-box{background:#edf5ff;border:1px solid #b9d5f7;border-radius:9px;padding:11px;font-size:12px;line-height:1.5}.parameter-box strong{font-size:12px}.parameter-box hr{border:0;border-top:1px solid #ccdded}.active-rule{padding:10px;border-radius:8px;background:#e4efe3;color:#305132;font-size:16px;font-weight:800;margin-bottom:10px}.rule{display:grid;grid-template-columns:28px 1fr;gap:8px;align-items:center;padding:8px;border:1px solid #d8dee6;border-radius:8px;margin-bottom:7px;min-width:0;background:#ffffff}.rule.on{background:#f6f9fc;border-color:#5a8bb6}.rule .num{border:1px solid #cbd4dc;background:#f1f4f7;border-radius:50%;height:26px;width:26px;display:grid;place-items:center;font-weight:800;color:#3b5873}.rule.on .num{background:#5a8bb6;color:white;border-color:#5a8bb6}.rule small{display:block;font-size:11px;color:#526b8c;margin-top:2px}.table-panel table{border-collapse:collapse;width:100%;font-size:11px}th,td{border-bottom:1px solid #cdd9e9;padding:7px 3px;text-align:center}th{font-weight:800;background:#f5f8fd}.credit-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.credit-card{border:1px solid #d5dde6;border-radius:9px;padding:12px;min-width:0}.credit-card b{font-size:15px}.credit-card p{font-size:12px}.disclaimer p{font-size:12px;line-height:1.5;margin-bottom:11px}.disclaimer h2{margin-bottom:10px}.small{font-size:11px;color:#546a85}.warn{color:#ab431d;font-weight:700}.chart-wrap{min-height:340px;flex:1;display:flex}.fine{font-size:11px;color:#61718b;line-height:1.45;margin-top:8px}.more-disclaimer{display:none}footer{margin:12px 0;text-align:center;color:#60728b;font-size:11px}@media(max-width:1300px){.dashboard{grid-template-columns:1fr 1fr;grid-template-areas:'curves tank' 'controls rules' 'table table' 'credits disclaimer'}.controls-grid{grid-template-columns:1fr 155px}.chart{min-height:330px}.strata-legend{font-size:10px}}@media(max-width:820px){.dashboard{grid-template-columns:1fr;grid-template-areas:'curves' 'tank' 'controls' 'rules' 'table' 'credits' 'disclaimer'}.chart{max-height:470px}.tank-scene{height:290px}.controls-grid{grid-template-columns:1fr 145px}.credit-grid{grid-template-columns:1fr}.disclaimer{display:none}.more-disclaimer{display:block;margin-top:12px}.more-disclaimer summary{padding:13px;border:1px solid #c6d8ed;border-radius:8px;background:#eef5ff;font-weight:750;cursor:pointer}.more-disclaimer[open] summary{border-radius:8px 8px 0 0}.more-disclaimer .content{padding:12px;border:1px solid #c6d8ed;border-top:0;border-radius:0 0 8px 8px;background:white}.more-disclaimer p{font-size:12px}}@media(max-width:525px){.wrap{padding:7px}.panel{padding:10px}.lights{gap:3px}.light{font-size:10px;padding:9px 1px;gap:2px}.light .dot{width:7px;height:7px}.light.on{padding:8px 0}.choice{font-size:12px;padding:8px}.controls-grid{grid-template-columns:1fr}.slider-row{grid-template-columns:minmax(105px,135px) 1fr 61px;gap:5px}.tag{font-size:10px}.strata-legend{font-size:9px}.strata-legend i{height:21px}.tank-vessel{left:18%;width:56%}h1{font-size:19px}}@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+
+/* Desktop, single-screen layout. The existing colours, curves and rule logic are retained. */
+@media (min-width:1301px) and (min-height:690px){
+  html,body{height:100%;overflow:hidden}
+  body{min-height:100dvh}
+  .wrap{height:100dvh;max-width:none;padding:8px 12px;display:flex;flex-direction:column;overflow:hidden}
+  header{flex:0 0 auto;min-height:42px;padding:6px 14px}
+  h1{font-size:clamp(18px,1.6vw,25px)}
+  h2{font-size:clamp(12px,.95vw,15px);margin-bottom:6px}
+  h3{font-size:12px;margin-bottom:5px}
+  .dashboard{flex:1;min-height:0;margin-top:7px;gap:7px;
+    grid-template-columns:minmax(0,1.04fr) minmax(0,1.08fr) minmax(0,.78fr);
+    grid-template-areas:'curves tank rules' 'curves controls table' 'credits credits disclaimer';
+    grid-template-rows:minmax(0,1.52fr) minmax(0,.93fr) minmax(0,.64fr)}
+  .panel{padding:8px 10px;border-radius:9px;min-height:0;overflow:hidden}
+  .inflow-buttons{gap:6px;margin-bottom:6px}
+  .choice{padding:6px 9px;font-size:11px}
+  .light-label{font-size:11px;margin-bottom:4px}
+  .lights{gap:3px;margin-bottom:6px}
+  .light{padding:6px 1px;font-size:10px;gap:3px}
+  .light.on{padding:5px 0}
+  .dot{width:9px;height:9px}
+  .chart-wrap{min-height:0;flex:1;align-items:center;justify-content:center}
+  .chart{min-height:0;max-height:100%;height:100%;width:100%;flex:1;object-fit:contain}
+  .keys{font-size:10px;margin:2px 0;gap:3px 9px}
+  .summary{padding:5px 9px;flex:none;margin-top:4px}
+  .big{font-size:clamp(17px,1.5vw,23px)}.sub{font-size:10px}
+  .tank-panel{display:flex;flex-direction:column}
+  .tank-scene{height:auto;flex:1;min-height:100px}
+  .tank-vessel{height:74%;bottom:5%}
+  .tank-status{padding:5px;margin-top:5px;font-size:10px;gap:5px;flex:none}
+  .tank-panel .fine{margin-top:4px;font-size:9px;flex:none}
+  .pipe.in{top:10%}.stream.in{top:16%;height:43%}
+  .pipe.out{bottom:28%}.stream.out{bottom:1%;height:31%}
+  .tag{padding:3px 5px;font-size:10px}
+  .tag.in,.tag.filling{top:2%}.tag.release{bottom:2%}
+  .equation-panel{flex:none;min-height:74px;max-height:101px}
+  .equation-heading{font-size:11px}
+  .equation-math{font-size:clamp(12px,.98vw,16px);min-height:43px}
+  .rules-panel .active-rule{padding:6px;font-size:13px;margin-bottom:7px}
+  .rule{padding:5px;margin-bottom:4px;gap:5px;font-size:10px}
+  .rule .num{height:20px;width:20px;font-size:11px}
+  .rule small{font-size:9px;margin-top:0}
+  .rules-panel .fine{font-size:9px;margin-top:4px;line-height:1.25}
+  .controls-grid{grid-template-columns:minmax(0,1fr) minmax(110px,28%);gap:6px}
+  .sliders{gap:6px}
+  .slider-row{grid-template-columns:minmax(105px,134px) minmax(35px,1fr) 49px;gap:5px}
+  .slider-row label{font-size:10px}
+  .slider-row output{font-size:10px;padding:3px 1px}
+  .parameter-box{font-size:9px;padding:6px;line-height:1.4}
+  .parameter-box strong{font-size:10px}.parameter-box p{margin:3px 0}.parameter-box hr{margin:5px 0}
+  .table-panel table{font-size:10px}.table-panel td,.table-panel th{padding:4px 2px}
+  .table-panel .fine{font-size:9px;margin-top:3px;line-height:1.3}
+  .credit-grid{gap:6px;height:calc(100% - 18px)}
+  .credit-card{padding:5px 8px;overflow:auto}
+  .credit-card b{font-size:12px}.credit-card p{font-size:10px;line-height:1.32;margin:2px 0 4px}
+  .disclaimer p{font-size:9px;line-height:1.3;margin:3px 0 5px}
+  footer{flex:0 0 auto;margin:3px 0 0;font-size:9px}
+}
+.equation-panel{margin-top:7px;padding:8px 10px;border:1px solid #d5dde6;border-radius:8px;background:#f7f8fa;color:#22354a}
+.equation-heading{font-weight:750;display:flex;align-items:center;justify-content:space-between;gap:7px}
+.equation-rule{color:#155fb6;background:#e0edff;border-radius:5px;padding:2px 6px;font-size:10px}
+.equation-math{overflow-x:auto;overflow-y:hidden;max-width:100%;display:flex;align-items:center;justify-content:center;min-height:49px;padding:3px 0}
+.equation-math math{font-size:1em;white-space:nowrap}
+.equation-math .invalid{color:#aa431c;font-size:12px}
+@media(max-width:1300px){.equation-math{font-size:clamp(11px,1.5vw,17px)}}
+@media(max-width:820px){.equation-panel{min-height:95px}.equation-math{font-size:clamp(13px,3vw,19px)}}
+
+/* Reservoir visual features: subdued, dynamic, proportional threshold bands. */
+.tank-strata{display:none}
+.tank-band{position:absolute;left:0;right:0;z-index:2;pointer-events:none;border-top:1px dashed rgba(45,62,76,.3);transition:bottom .16s,height .16s,opacity .16s}
+#tank-band-conservation{background:rgba(234,194,78,.18)}
+#tank-band-normal{background:rgba(91,171,111,.13)}
+#tank-band-flood{background:rgba(224,136,73,.14)}
+#tank-band-emergency{background:rgba(206,83,94,.14)}
+.tank-band.current{box-shadow:inset 4px 0 0 rgba(37,54,67,.47)}
+/* Water motion comes from moving diagonal streaks, not a glossy static gradient. */
+.stream{background:repeating-linear-gradient(160deg,#3998c4 0px,#3998c4 8px,#92d5ef 9px,#92d5ef 12px,#3998c4 16px);background-size:38px 80px;animation:flow-streaks .65s linear infinite;opacity:.93}
+@keyframes flow-streaks{from{background-position:0 0}to{background-position:0 80px}}
+.tank-water:before{animation:water-ripple 2.1s ease-in-out infinite alternate}
+@keyframes water-ripple{from{transform:translateY(0)}to{transform:translateY(2px)}}
+.equation-condition{font-size:12px;font-weight:600;line-height:1.35;margin-top:4px;color:#344d61}
+.equation-panel{max-height:none}
+@media(min-width:1301px) and (min-height:690px){
+  .equation-panel{min-height:91px;max-height:119px;padding:5px 8px}
+  .equation-condition{font-size:clamp(9px,.78vw,12px);line-height:1.24;margin-top:2px}
+  .equation-math{min-height:40px;padding:1px 0}
+}
+@media(prefers-reduced-motion:reduce){.stream,.tank-water:before{animation:none!important}.tank-band{transition:none!important}}
+
+
+/* Active rule threshold explanation. Layout only; the release equations remain unchanged. */
+.table-panel{display:flex;flex-direction:column;min-height:0}
+.threshold-head{display:flex;align-items:center;justify-content:space-between;gap:7px;margin-bottom:6px;flex-wrap:wrap;font-size:12px}
+.threshold-head strong{color:#234d77}
+.threshold-head span{font-variant-numeric:tabular-nums;color:#3c536b}
+.threshold-table{table-layout:fixed;text-align:left;font-size:12px!important}
+.threshold-table th,.threshold-table td{text-align:left;vertical-align:top;padding:7px 6px;line-height:1.32;overflow-wrap:anywhere}
+.threshold-table th:first-child,.threshold-table td:first-child{width:15%;font-weight:800}
+.threshold-table th:nth-child(2),.threshold-table td:nth-child(2){width:26%}
+.threshold-table .muted{color:#66788c}
+.threshold-summary{font-size:12px;font-weight:650;line-height:1.3;margin-top:8px;color:#284a64}
+.threshold-note{font-size:10px;line-height:1.3;color:#60718a;margin-top:5px}
+@media(min-width:1301px) and (min-height:690px){
+ .table-panel{overflow:auto}
+ .table-panel .threshold-head{font-size:11px;margin-bottom:4px}
+ .table-panel .threshold-table{font-size:11px!important}
+ .table-panel .threshold-table th,.table-panel .threshold-table td{padding:4px 3px;line-height:1.2}
+ .table-panel .threshold-summary{font-size:11px;margin-top:5px}
+ .table-panel .threshold-note{font-size:9px;margin-top:4px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header><h1>LISFLOOD v5.0 reservoir release explorer</h1><button class="reset" id="reset" type="button">↻ Reset everything</button></header>
+<main class="dashboard">
+<section class="panel curves"><h2>Release curves and four storage zones</h2>
+<div class="inflow-buttons"><button aria-pressed="true" class="choice active" id="low" type="button">Low inflow: 1,971.4 m³/s</button><button aria-pressed="false" class="choice" id="high" type="button">High inflow: 2Qf</button></div>
+<div class="light-label">Active release rule</div>
+<div class="lights" id="lights"><div class="light" style="--rule-colour:#e5b41e"><span class="dot"></span>Rule 1</div><div class="light" style="--rule-colour:#3caa56"><span class="dot"></span>Rule 2</div><div class="light" style="--rule-colour:#e34d5a"><span class="dot"></span>Rule 3</div><div class="light" style="--rule-colour:#347ce7"><span class="dot"></span>Rule 4</div><div class="light" style="--rule-colour:#f08a30"><span class="dot"></span>Rule 5</div><div class="light" style="--rule-colour:#a674e1"><span class="dot"></span>Rule 6</div></div>
+<div class="chart-wrap"><svg aria-label="Dynamic release curves, four coloured storage zones and filling marker" class="chart" id="chart" role="img" viewbox="0 0 760 480"></svg></div>
+<div class="keys"><span><i class="key" style="background:#f3cc6b"></i>Conservation</span><span><i class="key" style="background:#91d2a3"></i>Normal</span><span><i class="key" style="background:#ffb783"></i>Flood</span><span><i class="key" style="background:#ed9299"></i>Emergency</span></div>
+<div class="keys"><span><i class="key" style="background:#106fee"></i>Low inflow</span><span><i class="key" style="background:#fa7414"></i>High inflow</span><span>┆ Current filling</span></div>
+<div class="summary"><div><div class="sub">Selected release Qₜ</div><div class="big" id="selected-q">1,937.4 m³/s</div></div><div style="text-align:right"><div class="sub">Active branch</div><div id="selected-branch" style="font-weight:800;font-size:18px">Rule 2</div></div></div>
+</section>
+<section class="panel tank-panel"><h2>Reservoir storage, inflow, outflow and release rule selection</h2><div class="tank-scene"><div class="hills"></div><div class="pipe in"></div><div class="stream in" id="stream-in"></div><div class="tank-vessel"><div class="tank-water" id="tank-water"></div><div class="tank-band" id="tank-band-conservation" aria-hidden="true"></div><div class="tank-band" id="tank-band-normal" aria-hidden="true"></div><div class="tank-band" id="tank-band-flood" aria-hidden="true"></div><div class="tank-band" id="tank-band-emergency" aria-hidden="true"></div></div><div class="pipe out"></div><div class="stream out" id="stream-out"></div><div class="tag in">Inflow Iₜ<br/><span id="tank-i">1,971.4</span> m³/s</div><div class="tag filling">Filling <span id="tank-percent">50.0</span>%</div><div class="tag ft">Fₜ = <span id="tank-ft">0.50</span><br/>(<span id="tank-percent2">50</span>% full)</div><div class="tag release">Release Qₜ<br/><span id="tank-q">1,937.4</span> m³/s</div></div><div class="tank-status"><span>Current status: <b class="zone-badge" id="zone">Normal zone</b></span><span>Entering <b id="entering">1,971.4</b> m³/s</span><span>Leaving <b id="leaving">1,937.4</b> m³/s</span></div><div aria-label="Equation governing the currently active release rule" aria-live="polite" class="equation-panel" id="equation-panel"><div class="equation-heading">Active release equation<span class="equation-rule" id="equation-rule"></span></div><div class="equation-condition" id="equation-condition"></div><div class="equation-math" id="equation-math"></div></div><div class="fine">Illustrative instantaneous flows; water level is set manually, not simulated through time.</div></section>
+<section class="panel control-panel"><h2>Move each control independently</h2><div class="controls-grid"><div class="sliders">
+<div class="slider-row" style="--slider-colour:#1e63cc"><label for="ft">Current filling Fₜ</label><input id="ft" max="1" min="0" step=".005" type="range" value=".5"/><output id="ft-value">0.500</output></div>
+<div class="slider-row" style="--slider-colour:#d6a509"><label for="vc">Vc: Conservation</label><input id="vc" max=".995" min=".005" step=".005" type="range" value=".15"/><output id="vc-value">0.150</output></div>
+<div class="slider-row" style="--slider-colour:#39a651"><label for="vf">Vf: Flood threshold</label><input id="vf" max=".995" min=".005" step=".005" type="range" value=".76"/><output id="vf-value">0.760</output></div>
+<div class="slider-row" style="--slider-colour:#df4955"><label for="ve">Ve: Emergency</label><input id="ve" max="1" min=".005" step=".005" type="range" value=".95"/><output id="ve-value">0.950</output></div>
+<div class="slider-row" style="--slider-colour:#2677df"><label for="alpha">Alpha (α)</label><input id="alpha" max="1" min=".01" step=".005" type="range" value=".61"/><output id="alpha-value">0.610</output></div>
+<div class="slider-row" style="--slider-colour:#ec892a"><label for="k">Rule 5 coefficient k</label><input id="k" max="1" min="0" step=".005" type="range" value="1"/><output id="k-value">1.000</output></div>
+</div><div class="parameter-box"><strong>Flood inflow threshold:<br/><span id="qf">8,478.1</span> m³/s</strong><p>Qf = α × Q₁₀₀</p><hr/><b>Fixed inputs:</b><br/>Qₙ = 1,971.4 m³/s<br/>Qmin = 98.571 m³/s<br/>Q₁₀₀ = 13,898.5 m³/s<hr/>Threshold sliders are independent. Invalid ordering is flagged without changing values.</div></div></section>
+<section class="panel rules-panel"><h2>What rule is controlling your tap?</h2><div class="active-rule" id="active-rule">Rule 2: Quadratic low-inflow release</div><h3>The six release rules</h3><div id="rules">
+<div class="rule"><span class="num">1</span><div><b>Fₜ &lt; Vc</b><small>Conservation release</small></div></div>
+<div class="rule"><span class="num">2</span><div><b>Iₜ &lt; Qf and Vc ≤ Fₜ &lt; Ve</b><small>Quadratic low-inflow release</small></div></div>
+<div class="rule"><span class="num">3</span><div><b>Iₜ &lt; Qf and Fₜ ≥ Ve</b><small>Release equals Qf</small></div></div>
+<div class="rule"><span class="num">4</span><div><b>Iₜ ≥ Qf and Vc ≤ Fₜ &lt; Vf</b><small>Linear high-inflow release</small></div></div>
+<div class="rule"><span class="num">5</span><div><b>Iₜ ≥ Qf and Vf ≤ Fₜ &lt; Ve</b><small>Additional flood release</small></div></div>
+<div class="rule"><span class="num">6</span><div><b>Iₜ ≥ Qf and Fₜ ≥ Ve</b><small>Release equals inflow</small></div></div>
+</div><div aria-live="polite" class="fine" id="status"></div></section>
+<section class="panel table-panel"><h2>How do storage thresholds influence the active rule?</h2><div class="threshold-head"><strong id="threshold-active-rule">Rule 2: Quadratic low-inflow release</strong><span id="threshold-release">Release: 0.0 m³/s</span></div><table class="threshold-table"><thead><tr><th scope="col">Threshold</th><th scope="col">Role in active rule</th><th scope="col">Effect on release</th></tr></thead><tbody id="threshold-body"></tbody></table><div class="threshold-summary" id="threshold-summary"></div><div class="threshold-note">Effects are recalculated at the current filling and inflow. The comparison raises one threshold by 0.005 when the threshold ordering permits it; other settings are held fixed.</div></section>
+<section class="panel credits"><h2>Scientific attribution, research affiliations and acknowledgements</h2><div class="credit-grid"><div class="credit-card"><b><a href="https://orcid.org/0009-0006-0117-0361" target="_blank" rel="noopener noreferrer" title="Douglas Mulangwa ORCID profile">Douglas Mulangwa</a></b><p>Interactive visualisation panel design and development.</p><p>PhD researcher, <a href="https://research.reading.ac.uk/meteorology/people/douglas-mulangwa/" rel="noopener noreferrer" target="_blank">Department of Meteorology, University of Reading</a>, undertaking his PhD under the <a href="https://ourresearch.reading.ac.uk/engagement-and-impact/liz-stephens-inflow-flood-forecasts-south-sudan/" target="_blank" rel="noopener noreferrer">INFLOW project</a>.</p><p>Visiting Scientist at the <a href="https://www.ecmwf.int/" rel="noopener noreferrer" target="_blank">European Centre for Medium-Range Weather Forecasts (ECMWF)</a>.</p></div><div class="credit-card"><b>JRC and ECMWF</b><p><strong>European Commission Joint Research Centre (JRC):</strong> Development and documentation of the LISFLOOD hydrological model.</p><p><strong>ECMWF:</strong> Operational implementation of LISFLOOD within the Global Flood Awareness System (GloFAS).</p><p><a href="https://ec-jrc.github.io/lisflood-model/" rel="noopener noreferrer" target="_blank">Official LISFLOOD documentation</a></p></div></div></section>
+<section class="panel disclaimer"><h2>Scientific disclaimer and independent visualisation</h2><p><b>Scientific disclaimer.</b> This interactive panel visualises the reservoir release-rule relationships described for LISFLOOD v5.0. The numerical settings and curves are illustrative calculations, not observed reservoir releases, forecasts or validated simulations of reservoir behaviour. The reservoir animation does not simulate storage changes through time. The precise equations, including the Rule 5 coefficient k, require verification against the relevant LISFLOOD implementation before use as scientific evidence.</p><p><b>Independent visualisation.</b> Neither JRC nor ECMWF has endorsed, reviewed or approved this panel. Attribution to model developers, research affiliations and project support does not imply institutional endorsement or ownership of this visualisation.</p></section>
+</main>
+<details class="more-disclaimer"><summary>Scientific disclaimer and independent visualisation</summary><div class="content"><p><b>Scientific disclaimer.</b> This interactive panel visualises the reservoir release-rule relationships described for LISFLOOD v5.0. The numerical settings and curves are illustrative calculations, not observed reservoir releases, forecasts or validated simulations of reservoir behaviour. The reservoir animation does not simulate storage changes through time. The precise equations, including the Rule 5 coefficient k, require verification against the relevant LISFLOOD implementation before use as scientific evidence.</p><p><b>Independent visualisation.</b> Neither JRC nor ECMWF has endorsed, reviewed or approved this panel. Attribution to model developers, research affiliations and project support does not imply institutional endorsement or ownership of this visualisation.</p></div></details>
+<footer>Interactive educational illustration.</footer>
+</div>
+<script>
+'use strict';
+(()=>{
+const Qn=1971.4,Qmin=98.571,Q100=13898.5;
+const defaults={ft:.5,vc:.15,vf:.76,ve:.95,alpha:.61,k:1};
+const labels=['','Conservation release','Quadratic low-inflow release','Release equals Qf','Linear high-inflow release','Additional flood release','Release equals inflow'];
+const get=id=>document.getElementById(id);
+const format=n=>n.toLocaleString('en-GB',{minimumFractionDigits:1,maximumFractionDigits:1});
+let inflow='low';
+function getState(){const s={};for(const key in defaults)s[key]=Number(get(key).value);s.qf=s.alpha*Q100;s.i=inflow==='low'?Qn:2*s.qf;s.valid=s.vc>0&&s.vc<s.vf&&s.vf<s.ve&&s.ve<=1;return s;}
+// These are the release relationships used in the agreed demonstration panel.
+// They have NOT yet been verified against the relevant LISFLOOD source-code revision.
+function release(F,s,I){if(!s.valid)return {q:NaN,rule:0};const base=Qn*s.vc/s.vf;if(F<s.vc)return {q:Math.max(Qn*F/s.vf,Qmin),rule:1};if(I<s.qf){if(F<s.ve)return {q:base+Math.pow((F-s.vc)/(s.ve-s.vc),2)*(s.qf-base),rule:2};return {q:s.qf,rule:3};}if(F<s.vf)return {q:base+(F-s.vc)/(s.vf-s.vc)*(s.qf-base),rule:4};if(F<s.ve)return {q:s.qf+s.k*(F-s.vf)/(s.ve-s.vf)*(I-s.qf),rule:5};return {q:I,rule:6};}
+function draw(s,selected){
+const L=76,R=744,T=47,B=419,W=R-L,H=B-T;
+const lo=[],hi=[];for(let n=0;n<=700;n++){let f=n/700;lo.push(release(f,s,Qn).q);hi.push(release(f,s,2*s.qf).q);}
+const peak=Math.max(12000,s.i,...lo.filter(Number.isFinite),...hi.filter(Number.isFinite));const maxY=Math.ceil(peak/2500)*2500;
+const X=f=>L+W*f,Y=q=>B-H*q/maxY;let svg=[`<rect x="${L}" y="${T}" width="${W}" height="${H}" fill="#fff"/>`];
+if(s.valid){[[0,s.vc,'#f3cc6b'],[s.vc,s.vf,'#91d2a3'],[s.vf,s.ve,'#ffb783'],[s.ve,1,'#ed9299']].forEach(([a,b,c])=>svg.push(`<rect x="${X(a)}" y="${T}" width="${X(b)-X(a)}" height="${H}" fill="${c}" opacity=".32"/>`));}
+for(let j=0;j<=5;j++){let q=maxY*j/5;svg.push(`<line x1="${L}" x2="${R}" y1="${Y(q)}" y2="${Y(q)}" stroke="#aab8cb" stroke-opacity=".55"/><text x="${L-9}" y="${Y(q)+4}" text-anchor="end" font-size="13" fill="#536885">${Math.round(q).toLocaleString('en-GB')}</text>`);}
+for(let j=0;j<=10;j++){let x=X(j/10);svg.push(`<line x1="${x}" x2="${x}" y1="${T}" y2="${B}" stroke="#c3cfdd" stroke-opacity=".38"/><text x="${x}" y="${B+22}" text-anchor="middle" font-size="13" fill="#536885">${(j/10).toFixed(1)}</text>`);}
+if(s.valid){[[s.vc,'#d5a40f','Vc'],[s.vf,'#2c9e50','Vf'],[s.ve,'#e34855','Ve']].forEach(([f,c,t])=>{svg.push(`<line x1="${X(f)}" x2="${X(f)}" y1="${T}" y2="${B}" stroke="${c}" stroke-width="2" stroke-dasharray="6 5"/><rect x="${X(f)-20}" y="14" width="40" height="25" rx="5" fill="${c}"/><text x="${X(f)}" y="31" fill="white" text-anchor="middle" font-size="14" font-weight="bold">${t}</text>`);});
+svg.push(`<line x1="${X(s.ft)}" x2="${X(s.ft)}" y1="${T}" y2="${B}" stroke="#253956" stroke-width="2" stroke-dasharray="6 5"/><text x="${X(s.ft)}" y="${T+23}" text-anchor="middle" font-size="13" fill="#243957" font-weight="bold">Fₜ = ${s.ft.toFixed(3)}</text>`);
+[lo,hi].forEach((arr,i)=>{const d=arr.map((q,j)=>`${j?'L':'M'}${X(j/700).toFixed(2)},${Y(q).toFixed(2)}`).join(' ');svg.push(`<path d="${d}" fill="none" stroke="${i?'#fa7414':'#106fee'}" stroke-width="4"/>`);});
+if(Number.isFinite(selected.q))svg.push(`<circle cx="${X(s.ft)}" cy="${Y(selected.q)}" r="8" fill="${inflow==='low'?'#106fee':'#fa7414'}" stroke="white" stroke-width="2.5"/>`);
+}else svg.push(`<text x="400" y="220" fill="#b34522" text-anchor="middle" font-weight="bold" font-size="22">Invalid threshold order</text>`);
+svg.push(`<line x1="${L}" x2="${R}" y1="${B}" y2="${B}" stroke="#243957"/><line x1="${L}" x2="${L}" y1="${T}" y2="${B}" stroke="#243957"/><text x="410" y="478" fill="#16325a" text-anchor="middle" font-size="16" font-weight="bold">Reservoir filling Fₜ</text><text x="20" y="231" transform="rotate(-90 20 231)" fill="#16325a" text-anchor="middle" font-size="16" font-weight="bold">Release Qₜ (m³/s)</text>`);get('chart').innerHTML=svg.join('');}
+
+// Presentation only: equations mirror the existing release() branches. No arithmetic was modified.
+const mx=(body)=>`<math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mstyle displaystyle="true">${body}</mstyle></math>`;
+const mi=(v)=>`<mi>${v}</mi>`, mn=(v)=>`<mn>${v}</mn>`, sub=(a,b)=>`<msub>${mi(a)}${mi(b)}</msub>`;
+const frac=(a,b)=>`<mfrac><mrow>${a}</mrow><mrow>${b}</mrow></mfrac>`;
+const par=(a)=>`<mo>(</mo>${a}<mo>)</mo>`;
+const Qt=sub('Q','t'),QnMath=sub('Q','n'),QfMath=sub('Q','f'),QminMath=`<msub>${mi('Q')}<mtext>min</mtext></msub>`;
+const Ft=sub('F','t'),Vc=sub('V','c'),Vf=sub('V','f'),Ve=sub('V','e'),It=sub('I','t');
+const base=frac(`${QnMath}${Vc}`,Vf);
+const equations={
+  1:mx(`${Qt}<mo>=</mo><mi mathvariant="normal">max</mi>${par(`${frac(`${QnMath}${Ft}`,Vf)}<mo>,</mo>${QminMath}`)}`),
+  2:mx(`${Qt}<mo>=</mo>${base}<mo>+</mo><msup><mrow>${par(frac(`${Ft}<mo>−</mo>${Vc}`,`${Ve}<mo>−</mo>${Vc}`))}</mrow>${mn('2')}</msup>${par(`${QfMath}<mo>−</mo>${base}`)}`),
+  3:mx(`${Qt}<mo>=</mo>${QfMath}`),
+  4:mx(`${Qt}<mo>=</mo>${base}<mo>+</mo>${frac(`${Ft}<mo>−</mo>${Vc}`,`${Vf}<mo>−</mo>${Vc}`)}${par(`${QfMath}<mo>−</mo>${base}`)}`),
+  5:mx(`${Qt}<mo>=</mo>${QfMath}<mo>+</mo>${mi('k')}${frac(`${Ft}<mo>−</mo>${Vf}`,`${Ve}<mo>−</mo>${Vf}`)}${par(`${It}<mo>−</mo>${QfMath}`)}`),
+  6:mx(`${Qt}<mo>=</mo>${It}`)
+};
+const ruleConditions={
+  1:'Below the conservation threshold',
+  2:'Below flood inflow, between conservation and emergency storage',
+  3:'Below flood inflow, at or above emergency storage',
+  4:'High inflow, between conservation and flood storage',
+  5:'High inflow, between flood and emergency storage',
+  6:'High inflow, at or above emergency storage'
+};
+function updateEquation(rule){
+  get('equation-condition').textContent=rule?ruleConditions[rule]:'Thresholds are out of order';
+  get('equation-rule').textContent=rule?'Rule '+rule:'Invalid thresholds';
+  get('equation-math').innerHTML=equations[rule]||'<span class="invalid">Require 0 &lt; Vc &lt; Vf &lt; Ve ≤ 1</span>';
+}
+
+
+// Explanatory labels are specific to the existing six release branches.
+// Quantified changes below always use release() itself, not a second model.
+const thresholdDescriptions={
+  1:{vc:['Selection boundary','Sets the upper filling limit of Rule 1.'],vf:['In equation','Sets the denominator of Qn × Ft/Vf; the minimum-release constraint may apply.'],ve:['Not used','Does not appear in Rule 1 or its selection condition.'],summary:'Conservation release: the greater of Qn × Ft/Vf and Qmin.'},
+  2:{vc:['In equation and boundary','Sets the start of this storage interval and enters both the baseline and squared filling fraction.'],vf:['In equation','Sets the denominator of the baseline term Qn × Vc/Vf.'],ve:['In equation and boundary','Sets the upper limit and denominator of the squared filling fraction.'],summary:'Quadratic low-inflow release: adds a storage-dependent contribution to Qn × Vc/Vf.'},
+  3:{vc:['Not used','Does not enter this equation.'],vf:['Not used','Does not enter this equation.'],ve:['Selection boundary','Determines the start of the emergency-storage branch.'],summary:'Low inflow at emergency storage: release equals Qf.'},
+  4:{vc:['In equation and boundary','Changes the baseline Qn × Vc/Vf and the interpolation fraction (Ft−Vc)/(Vf−Vc).'],vf:['In equation and boundary','Changes the baseline and the upper endpoint of the linear interpolation.'],ve:['Not used','Does not enter this rule.'],summary:'Linear high-inflow release: interpolates between the baseline and Qf.'},
+  5:{vc:['Not used','Does not enter Rule 5.'],vf:['In equation and boundary','Sets the start of the flood-storage interval and the fraction (Ft−Vf)/(Ve−Vf).'],ve:['In equation and boundary','Sets the end of the flood-storage interval and its interpolation fraction.'],summary:'Additional flood release: adds k × (Ft−Vf)/(Ve−Vf) × (It−Qf) to Qf.'},
+  6:{vc:['Not used','Does not enter this rule.'],vf:['Not used','Does not enter this rule.'],ve:['Selection boundary','Determines the start of the emergency-storage branch.'],summary:'High inflow at emergency storage: release equals the selected inflow.'}
+};
+function updateThresholdExplanation(s,a){
+  const body=get('threshold-body');
+  if(!s.valid || !a.rule){
+    get('threshold-active-rule').textContent='Invalid threshold order';
+    get('threshold-release').textContent='Release unavailable';
+    body.innerHTML='<tr><td colspan="3">Require 0 &lt; Vc &lt; Vf &lt; Ve ≤ 1.</td></tr>';
+    get('threshold-summary').textContent='Adjust the thresholds to restore a valid ordering.';
+    return;
+  }
+  const config=thresholdDescriptions[a.rule];
+  get('threshold-active-rule').textContent='Active Rule '+a.rule+': '+labels[a.rule];
+  get('threshold-release').textContent='Qₜ = '+format(a.q)+' m³/s';
+  const names={vc:'Vc',vf:'Vf',ve:'Ve'};
+  body.replaceChildren();
+  for(const key of ['vc','vf','ve']){
+    const [role,mechanism]=config[key];
+    const trial={...s,[key]:Number((s[key]+.005).toFixed(6))};
+    trial.valid=trial.vc>0&&trial.vc<trial.vf&&trial.vf<trial.ve&&trial.ve<=1;
+    let consequence;
+    if(!trial.valid){
+      consequence='A +0.005 increase is not possible without violating threshold order.';
+    }else{
+      const revised=release(s.ft,trial,s.i);
+      const delta=revised.q-a.q;
+      const magnitude=Math.abs(delta);
+      const result=magnitude<.05?'no change at displayed precision':(delta>0?'increases':'decreases')+' release by '+format(magnitude)+' m³/s';
+      consequence='Increasing '+names[key]+' by 0.005 '+(revised.rule!==a.rule?'switches selection to Rule '+revised.rule+' and ':'')+result+'.';
+    }
+    const tr=document.createElement('tr');
+    const td1=document.createElement('td');td1.textContent=names[key];
+    const td2=document.createElement('td');td2.textContent=role;
+    if(role==='Not used')td2.className='muted';
+    const td3=document.createElement('td');
+    const line1=document.createElement('div');line1.textContent=mechanism;
+    const line2=document.createElement('div');line2.style.marginTop='3px';line2.style.fontWeight='650';line2.textContent=consequence;
+    td3.append(line1,line2);tr.append(td1,td2,td3);body.append(tr);
+  }
+  get('threshold-summary').textContent='Release behaviour: '+config.summary;
+}
+
+function update(){const s=getState(),a=release(s.ft,s,s.i);updateEquation(a.rule);updateThresholdExplanation(s,a); // selected state uses the current inflow
+for(const k in defaults)get(k+'-value').textContent=s[k].toFixed(3);
+get('qf').textContent=format(s.qf);get('tank-i').textContent=format(s.i);get('tank-percent').textContent=(100*s.ft).toFixed(1);get('tank-percent2').textContent=Math.round(100*s.ft);get('tank-ft').textContent=s.ft.toFixed(2);get('tank-water').style.height=(s.ft*100)+'%';
+if(s.valid){
+  const bands=[['conservation',0,s.vc],['normal',s.vc,s.vf],['flood',s.vf,s.ve],['emergency',s.ve,1]];
+  for(const [name,lower,upper] of bands){
+    const band=get('tank-band-'+name);
+    band.style.bottom=(lower*100)+'%';
+    band.style.height=((upper-lower)*100)+'%';
+    band.classList.toggle('current',s.ft>=lower && (s.ft<upper || (name==='emergency' && s.ft===1)));
+  }
+}
+get('stream-in').style.scale=(.6+Math.min(s.i/17000,1)*.9)+' 1';get('stream-out').style.scale=(Number.isFinite(a.q)?.35+Math.min(a.q/17000,1)*1.6:.35)+' 1';
+get('selected-q').textContent=Number.isFinite(a.q)?format(a.q)+' m³/s':'Unavailable';get('tank-q').textContent=Number.isFinite(a.q)?format(a.q):'N/A';get('selected-branch').textContent=a.rule?'Rule '+a.rule:'Invalid thresholds';get('active-rule').textContent=a.rule?'Rule '+a.rule+': '+labels[a.rule]:'Invalid threshold order';get('entering').textContent=format(s.i);get('leaving').textContent=Number.isFinite(a.q)?format(a.q):'N/A';
+const zone=s.ft<s.vc?'Conservation zone':s.ft<s.vf?'Normal zone':s.ft<s.ve?'Flood zone':'Emergency zone';get('zone').textContent=s.valid?zone:'Invalid';
+document.querySelectorAll('#lights .light').forEach((item,i)=>item.classList.toggle('on',i+1===a.rule));document.querySelectorAll('#rules .rule').forEach((item,i)=>item.classList.toggle('on',i+1===a.rule));
+for(const name of ['low','high']){get(name).classList.toggle('active',inflow===name);get(name).setAttribute('aria-pressed',String(inflow===name));}
+get('status').innerHTML=!s.valid?'<span class="warn">Invalid thresholds: 0 &lt; Vc &lt; Vf &lt; Ve ≤ 1 is required. No controls were moved automatically.</span>':`Selected rule ${a.rule}. Inflow: ${format(s.i)} m³/s; release: ${format(a.q)} m³/s.`+(inflow==='low'&&s.i>=s.qf?' The nominal low-inflow choice satisfies the high-inflow condition for this α.':'');
+draw(s,a);}
+for(const k in defaults)get(k).addEventListener('input',update);for(const name of ['low','high'])get(name).addEventListener('click',()=>{inflow=name;update();});get('reset').addEventListener('click',()=>{for(const k in defaults)get(k).value=defaults[k];inflow='low';update();});update();
+})();
+</script>
+</body>
+</html>
